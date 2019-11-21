@@ -1,0 +1,67 @@
+<!DOCTYPE web-app PUBLIC
+ "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+ "http://java.sun.com/dtd/web-app_2_3.dtd" >
+
+<web-app>
+	<display-name>Archetype Created Web Application</display-name>
+	<filter>
+		<filter-name>DatabaseConnection</filter-name>
+		<display-name>DatabaseConnection</display-name>
+		<description></description>
+		<filter-class>com.yusufsezer.filter.DatabaseConnection</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>DatabaseConnection</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	<servlet>
+		<servlet-name>IndexServlet</servlet-name>
+		<display-name>IndexServlet</display-name>
+		<description></description>
+		<servlet-class>com.yusufsezer.controller.IndexServlet</servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>AddServlet</servlet-name>
+		<display-name>AddServlet</display-name>
+		<description></description>
+		<servlet-class>com.yusufsezer.controller.AddServlet</servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>DeleteServlet</servlet-name>
+		<display-name>DeleteServlet</display-name>
+		<description></description>
+		<servlet-class>com.yusufsezer.controller.DeleteServlet</servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>DetailsServlet</servlet-name>
+		<display-name>DetailsServlet</display-name>
+		<description></description>
+		<servlet-class>com.yusufsezer.controller.DetailsServlet</servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>EditServlet</servlet-name>
+		<display-name>EditServlet</display-name>
+		<description></description>
+		<servlet-class>com.yusufsezer.controller.EditServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>IndexServlet</servlet-name>
+		<url-pattern>/</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>AddServlet</servlet-name>
+		<url-pattern>/add</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>DeleteServlet</servlet-name>
+		<url-pattern>/delete</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>DetailsServlet</servlet-name>
+		<url-pattern>/details</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>EditServlet</servlet-name>
+		<url-pattern>/edit</url-pattern>
+	</servlet-mapping>
+</web-app>

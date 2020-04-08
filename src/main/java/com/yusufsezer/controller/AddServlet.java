@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 public class AddServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
-	
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -95,13 +95,14 @@ public class AddServlet extends HttpServlet {
         }
 
         IRepository<Contact, Integer> repository = Helper.getRepository(request);
-        Contact newContact = new Contact(0, request.getParameter("FirstName"),
-                request.getParameter("LastName"),
-                request.getParameter("Email"),
-                request.getParameter("PhoneNumber"),
-                request.getParameter("Address"),
-                request.getParameter("WebAddress"),
-                request.getParameter("Notes"));
+        Contact newContact = new Contact();
+        newContact.setFirstName(request.getParameter("FirstName"));
+        newContact.setLastName(request.getParameter("LastName"));
+        newContact.setEmail(request.getParameter("Email"));
+        newContact.setPhoneNumber(request.getParameter("PhoneNumber"));
+        newContact.setAddress(request.getParameter("Address"));
+        newContact.setWebAddress(request.getParameter("WebAddress"));
+        newContact.setNotes(request.getParameter("Notes"));
 
         repository.add(newContact);
         response.sendRedirect(".");

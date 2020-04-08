@@ -9,7 +9,7 @@ import javax.servlet.ServletRequest;
 public class Helper {
 
     public final static String PROJECT_NAME = "Java Servlet Contact";
-    public final static String REPOSITORY_NAME = "sqlite";
+    public final static String REPOSITORY_NAME = "mysql";
     public static String DB_URL = "";
 
     public static String header(String title) {
@@ -47,7 +47,7 @@ public class Helper {
     }
 
     public static IRepository<Contact, Integer> createRepository() {
-        return new MySQLRepository<>(DB_URL);
+        return new MySQLRepository(DB_URL);
     }
 
     public static IRepository<Contact, Integer> getRepository(ServletRequest request) {

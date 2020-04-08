@@ -4,8 +4,8 @@ import java.io.Serializable;
 
 public class Contact implements Serializable {
 
-	private static final long serialVersionUID = 1L;	
-	public int id;
+    private static final long serialVersionUID = 2L;
+    public int id;
     public String firstName;
     public String lastName;
     public String email;
@@ -13,24 +13,6 @@ public class Contact implements Serializable {
     public String address;
     public String webAddress;
     public String notes;
-
-    public Contact(int id,
-            String firstName,
-            String lastName,
-            String email,
-            String phoneNumber,
-            String address,
-            String webAddress,
-            String notes) {
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.phoneNumber = phoneNumber;
-        this.address = address;
-        this.webAddress = webAddress;
-        this.notes = notes;
-    }
 
     public int getId() {
         return id;

@@ -13,7 +13,7 @@ import java.util.List;
 
 public class IndexServlet extends HttpServlet {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -66,6 +66,5 @@ public class IndexServlet extends HttpServlet {
         }
         return row;
     }
-
 
 }

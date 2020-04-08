@@ -14,7 +14,7 @@ public class EditServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
 
-	@Override
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
@@ -97,7 +97,7 @@ public class EditServlet extends HttpServlet {
 
         String[] parameters = {"id", "FirstName", "LastName", "Email",
             "PhoneNumber", "Address", "WebAddress", "Notes"};
-        
+
         boolean parameterResult = Helper
                 .checkParameters(parameters, request.getParameterMap());
 

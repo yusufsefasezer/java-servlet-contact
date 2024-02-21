@@ -1,5 +1,6 @@
-# Java Servlet MySQL Contact
-A simple MySQL contact list application developed with Java EE Servlet.
+# Java Servlet Contact
+
+A simple contact list application developed with Java EE Servlet.
 
 This project developed with Java EE Servlet, Maven, MySQL.
 
@@ -18,4 +19,4 @@ mvn tomcat7:run
 # License
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details
 
-Created by [Yusuf SEZER](http://www.yusufsezer.com)
+Created by [Yusuf Sezer](https://www.yusufsezer.com)

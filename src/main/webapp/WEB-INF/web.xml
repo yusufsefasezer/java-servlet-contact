@@ -1,68 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
-    <filter>
-        <filter-name>DatabaseConnection</filter-name>
-        <display-name>DatabaseConnection</display-name>
-        <description></description>
-        <filter-class>com.yusufsezer.filter.DatabaseConnection</filter-class>
-        <init-param>
-            <description>Database Connection URL</description>
-            <param-name>DB_URL</param-name>
-            <param-value>jdbc:mysql://localhost:3306/contact?useSSL=false&amp;serverTimezone=UTC&amp;user=root&amp;password=</param-value>
-        </init-param>
-    </filter>
-    <filter-mapping>
-        <filter-name>DatabaseConnection</filter-name>
-        <url-pattern>/*</url-pattern>
-    </filter-mapping>
-    <servlet>
-        <servlet-name>IndexServlet</servlet-name>
-        <display-name>IndexServlet</display-name>
-        <description></description>
-        <servlet-class>com.yusufsezer.controller.IndexServlet</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>AddServlet</servlet-name>
-        <display-name>AddServlet</display-name>
-        <description></description>
-        <servlet-class>com.yusufsezer.controller.AddServlet</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>DeleteServlet</servlet-name>
-        <display-name>DeleteServlet</display-name>
-        <description></description>
-        <servlet-class>com.yusufsezer.controller.DeleteServlet</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>DetailsServlet</servlet-name>
-        <display-name>DetailsServlet</display-name>
-        <description></description>
-        <servlet-class>com.yusufsezer.controller.DetailsServlet</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>EditServlet</servlet-name>
-        <display-name>EditServlet</display-name>
-        <description></description>
-        <servlet-class>com.yusufsezer.controller.EditServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>IndexServlet</servlet-name>
-        <url-pattern>/</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>AddServlet</servlet-name>
-        <url-pattern>/add</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>DeleteServlet</servlet-name>
-        <url-pattern>/delete</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>DetailsServlet</servlet-name>
-        <url-pattern>/details</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>EditServlet</servlet-name>
-        <url-pattern>/edit</url-pattern>
-    </servlet-mapping>
+<web-app version="6.0" xmlns="https://jakarta.ee/xml/ns/jakartaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd">
+    <context-param>
+        <description>Repository type</description>
+        <param-name>repository.type</param-name>
+        <param-value>MYSQL</param-value>
+    </context-param>
+
+    <context-param>
+        <description>Database Connection URL</description>
+        <param-name>database.class</param-name>
+        <param-value>com.mysql.cj.jdbc.Driver</param-value>
+    </context-param>
+
+    <context-param>
+        <description>Database Connection URL</description>
+        <param-name>database.url</param-name>
+        <param-value>jdbc:mysql://localhost:3306/contact?useSSL=false&amp;serverTimezone=UTC&amp;</param-value>
+    </context-param>
+
+    <context-param>
+        <description>Database User</description>
+        <param-name>database.user</param-name>
+        <param-value>root</param-value>
+    </context-param>
+
+    <context-param>
+        <description>Database Password</description>
+        <param-name>database.password</param-name>
+        <param-value>root</param-value>
+    </context-param>
 </web-app>

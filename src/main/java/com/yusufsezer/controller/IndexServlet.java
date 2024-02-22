@@ -1,70 +1,91 @@
 package com.yusufsezer.controller;
 
-import com.yusufsezer.contracts.IRepository;
-import java.io.IOException;
-import java.io.PrintWriter;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import com.yusufsezer.helper.Helper;
 import com.yusufsezer.model.Contact;
-import java.util.List;
+import com.yusufsezer.util.ViewUtils;
+import com.yusufsezer.util.WebUtils;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.Collection;
 
+@WebServlet("/")
 public class IndexServlet extends HttpServlet {
 
-    private static final long serialVersionUID = 1L;
-
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        PrintWriter printWriter = response.getWriter();
-        IRepository<Contact, Integer> repository = Helper.getRepository(request);
-        String pageContent = "<p><a href=\"add\">Add New Contact</a></p>\n"
-                + "\n"
-                + "<table class=\"table\">\n"
-                + "    <thead>\n"
-                + "        <tr>\n"
-                + "            <th>First Name</th>\n"
-                + "            <th>Last Name</th>\n"
-                + "            <th>Email</th>\n"
-                + "            <th>Phone Number</th>\n"
-                + "            <th>Address</th>\n"
-                + "            <th>Web Address</th>\n"
-                + "            <th>Notes</th>\n"
-                + "            <th></th>\n"
-                + "        </tr>\n"
-                + "    </thead>\n"
-                + "\n"
-                + "    <tbody>\n"
-                + getContactList(repository.getAll())
-                + "\n"
-                + "    </tbody>\n"
-                + "</table>"
-                + "\n";
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        var writer = response.getWriter();
+        var repository = WebUtils.getRepository(getServletContext());
+        Collection<Contact> contacts = repository.getAll();
 
-        printWriter.write(Helper.generatePage("Contact list", pageContent));
+        String contactsHTML = contactsToHTMLRow(contacts);
+        String flashMessage = WebUtils.flashMessage(request, null);
+        String flashMessageContent = "null".equals(flashMessage) ? "" : """
+                                     <div class="alert alert-info" role="alert">
+                                       %s
+                                     </div>
+                                     """.formatted(flashMessage);
+        String pageContent = """
+        <p><a href="add">Add New Contact</a></p>
+
+                             %s
+
+        <table class="table">
+          <thead>
+            <tr>
+              <th>First Name</th>
+              <th>Last Name</th>
+              <th>Email</th>
+              <th>Phone Number</th>
+              <th>Address</th>
+              <th>Web Address</th>
+              <th>Notes</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>%s</tbody>
+        </table>""".formatted(flashMessageContent, contactsHTML);
+        String builtPage = ViewUtils.buildPage("Contact list", pageContent);
+
+        writer.write(builtPage);
     }
 
-    protected String getContactList(List<Contact> contacts) {
-        String row = "";
+    private String contactsToHTMLRow(Collection<Contact> contacts) {
+        StringBuilder stringBuilder = new StringBuilder();
+
         for (Contact contact : contacts) {
-            row += "        <tr>\n"
-                    + "            <td>" + contact.getFirstName() + "</td>\n"
-                    + "            <td>" + contact.getLastName() + "</td>\n"
-                    + "            <td>" + contact.getEmail() + "</td>\n"
-                    + "            <td>" + contact.getPhoneNumber() + "</td>\n"
-                    + "            <td>" + contact.getAddress() + "</td>\n"
-                    + "            <td>" + contact.getWebAddress() + "</td>\n"
-                    + "            <td>" + contact.getNotes() + "</td>\n"
-                    + "            <td>\n"
-                    + "                <a href=\"edit?id=" + contact.getId() + "\">Edit</a> |\n"
-                    + "                <a href=\"details?id=" + contact.getId() + "\">Details</a> |\n"
-                    + "                <a href=\"delete?id=" + contact.getId() + "\" onclick=\"return confirm('Are you sure you want to delete this?')\">Delete</a>\n"
-                    + "            </td>\n"
-                    + "        </tr>";
+            Object id = contact.getId();
+            String firstName = contact.getFirstName();
+            String lastName = contact.getLastName();
+            String email = contact.getEmail();
+            String phoneNumber = contact.getPhoneNumber();
+            String address = contact.getAddress();
+            String webAddress = contact.getWebAddress();
+            String notes = contact.getNotes();
+
+            String row = """
+                   <tr>
+                   <td>%s</td>
+                   <td>%s</td>
+                   <td>%s</td>
+                   <td>%s</td>
+                   <td>%s</td>
+                   <td>%s</td>
+                   <td>%s</td>
+                   <td>
+                   <a href="edit?id=%d">Edit</a> |
+                   <a href="details?id=%d">Details</a> |
+                   <a href="delete?id=%d" onclick="return confirm('Are you sure you want to delete this?')">Delete</a>
+                   </td>
+                   </tr>
+                   """.formatted(firstName, lastName, email, phoneNumber, address, webAddress, notes, id, id, id);
+
+            stringBuilder.append(row);
         }
-        return row;
+
+        return stringBuilder.toString();
     }
 
 }

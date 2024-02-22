@@ -1,61 +1,79 @@
 package com.yusufsezer.controller;
 
-import com.yusufsezer.contracts.IRepository;
-import com.yusufsezer.helper.Helper;
 import com.yusufsezer.model.Contact;
+import com.yusufsezer.util.ViewUtils;
+import com.yusufsezer.util.WebUtils;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import java.util.Optional;
 
+@WebServlet("/details")
 public class DetailsServlet extends HttpServlet {
 
-    private static final long serialVersionUID = 1L;
-
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        var writer = response.getWriter();
+        String idParam = String.valueOf(request.getParameter("id"));
+        boolean isNullOrNotANumber = "null".equals(idParam) || !idParam.matches("\\d+");
+        Optional<Contact> foundContact;
 
-        if (!request.getParameterMap().containsKey("id")) {
+        try {
+            if (isNullOrNotANumber) {
+                throw new RuntimeException("Invalid or missing contact ID.");
+            }
+            var contactId = Integer.valueOf(idParam);
+            var repository = WebUtils.getRepository(getServletContext());
+            foundContact = repository.get(contactId);
+            if (foundContact.isEmpty()) {
+                throw new RuntimeException("No record found.");
+            }
+        } catch (RuntimeException exception) {
+            WebUtils.flashMessage(request, exception.getMessage());
             response.sendRedirect(".");
+            return;
         }
 
-        IRepository<Contact, Integer> repository = Helper.getRepository(request);
-        Integer id = Integer.parseInt(request.getParameter("id"));
-        Contact currentContact = repository.get(id);
+        Contact contact = foundContact.get();
+        Object id = contact.getId();
+        String firstName = contact.getFirstName();
+        String lastName = contact.getLastName();
+        String email = contact.getEmail();
+        String phoneNumber = contact.getPhoneNumber();
+        String address = contact.getAddress();
+        String webAddress = contact.getWebAddress();
+        String notes = contact.getNotes();
 
-        if (currentContact == null) {
-            response.sendRedirect(".");
-        }
+        String pageContent = """
+    <div>
+      <dl class="row">
+        <dt class="col-sm-2">First Name</dt>
+        <dd class="col-sm-10">%s</dd>
+        <dt class="col-sm-2">Last Name</dt>
+        <dd class="col-sm-10">%s</dd>
+        <dt class="col-sm-2">Email</dt>
+        <dd class="col-sm-10">%s</dd>
+        <dt class="col-sm-2">Phone Number</dt>
+        <dd class="col-sm-10">%s</dd>
+        <dt class="col-sm-2">Address</dt>
+        <dd class="col-sm-10">%s</dd>
+        <dt class="col-sm-2">Web Address</dt>
+        <dd class="col-sm-10">%s</dd>
+        <dt class="col-sm-2">Notes</dt>
+        <dd class="col-sm-10">%s</dd>
+      </dl>
+    </div>
 
-        String pageContent = "        <div>\n"
-                + "\n"
-                + "            <dl class=\"row\">\n"
-                + "                <dt class=\"col-sm-2\">First Name</dt>\n"
-                + "                <dd class=\"col-sm-10\">" + currentContact.getFirstName() + "</dd>\n"
-                + "                <dt class=\"col-sm-2\">Last Name</dt>\n"
-                + "                <dd class=\"col-sm-10\">" + currentContact.getLastName() + "</dd>\n"
-                + "                <dt class=\"col-sm-2\">Email</dt>\n"
-                + "                <dd class=\"col-sm-10\">" + currentContact.getEmail() + "</dd>\n"
-                + "                <dt class=\"col-sm-2\">Phone Number</dt>\n"
-                + "                <dd class=\"col-sm-10\">" + currentContact.getPhoneNumber() + "</dd>\n"
-                + "                <dt class=\"col-sm-2\">Address</dt>\n"
-                + "                <dd class=\"col-sm-10\">" + currentContact.getAddress() + "</dd>\n"
-                + "                <dt class=\"col-sm-2\">Web Address</dt>\n"
-                + "                <dd class=\"col-sm-10\">" + currentContact.getWebAddress() + "</dd>\n"
-                + "                <dt class=\"col-sm-2\">Notes</dt>\n"
-                + "                <dd class=\"col-sm-10\">" + currentContact.getNotes() + "</dd>\n"
-                + "            </dl>\n"
-                + "        </div>\n"
-                + "        <div>\n"
-                + "            <a href=\"edit?id=" + currentContact.getId() + "\">Edit</a> |\n"
-                + "            <a href=\".\">Back to List</a>\n"
-                + "        </div>";
+    <div>
+      <a href="edit?id=%d">Edit</a> |
+      <a href=".">Back to List</a>
+    </div>""".formatted(firstName, lastName, email, phoneNumber, address, webAddress, notes, id);
+        String builtPage = ViewUtils.buildPage("Details", pageContent);
 
-        PrintWriter printWriter = response.getWriter();
-        printWriter.write(Helper.generatePage("Details", pageContent));
+        writer.write(builtPage);
     }
 
 }

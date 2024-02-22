@@ -1,31 +1,34 @@
 package com.yusufsezer.controller;
 
-import com.yusufsezer.contracts.IRepository;
-import com.yusufsezer.helper.Helper;
-import com.yusufsezer.model.Contact;
+import com.yusufsezer.util.WebUtils;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
+@WebServlet("/delete")
 public class DeleteServlet extends HttpServlet {
 
-    private static final long serialVersionUID = 1L;
-
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String idParam = String.valueOf(request.getParameter("id"));
+        boolean isNullOrNotANumber = "null".equals(idParam) || !idParam.matches("\\d+");
 
-        if (!request.getParameterMap().containsKey("id")) {
-            response.sendRedirect(".");
+        try {
+            if (isNullOrNotANumber) {
+                throw new RuntimeException("Invalid or missing contact ID.");
+            }
+            var contactId = Integer.valueOf(idParam);
+            var repository = WebUtils.getRepository(getServletContext());
+            repository.remove(contactId);
+            WebUtils.flashMessage(request, "Contact deleted successfully.");
+        } catch (RuntimeException exception) {
+            WebUtils.flashMessage(request, exception.getMessage());
         }
 
-        Integer id = Integer.parseInt(request.getParameter("id"));
-        IRepository<Contact, Integer> repository = Helper.getRepository(request);
-        repository.remove(id);
         response.sendRedirect(".");
-
     }
 
 }

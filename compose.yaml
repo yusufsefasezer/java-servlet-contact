@@ -1,0 +1,24 @@
+services:
+    # MySQL Container
+    mysql:
+        image: mysql
+        environment:
+            MYSQL_DATABASE: contact
+            MYSQL_ROOT_PASSWORD: root
+        ports:
+            - 3306:3306
+        healthcheck:
+            test: mysqladmin ping -h 127.0.0.1 -u root --password=root
+            start_period: 5s
+            interval: 5s
+            timeout: 5s
+            retries: 5
+
+    #Java Servlet Contact
+    java-servlet-contact:
+        build: .
+        ports:
+            - 80:8080
+        depends_on:
+            mysql:
+                condition: service_healthy

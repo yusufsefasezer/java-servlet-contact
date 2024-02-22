@@ -15,7 +15,7 @@
     <context-param>
         <description>Database Connection URL</description>
         <param-name>database.url</param-name>
-        <param-value>jdbc:mysql://localhost:3306/contact?useSSL=false&amp;serverTimezone=UTC&amp;</param-value>
+        <param-value>jdbc:mysql://mysql/contact?useSSL=false&amp;allowPublicKeyRetrieval=true&amp;</param-value>
     </context-param>
 
     <context-param>

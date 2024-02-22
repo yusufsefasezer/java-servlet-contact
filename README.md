@@ -41,7 +41,9 @@ You can use the following commands to generate a WAR file.
 mvn package
 ```
 
-Onc compiled, You can install the WAR in your favorite Servlet Container.
+Once compiled, You can install the WAR in your favorite Servlet Container.
+
+**NOTE:** Servlet Container must support Servlet 6.0 specs
 
 ## Docker
 
@@ -55,6 +57,18 @@ docker build -t java-servlet-contact .
 
 ```
 docker run -p 80:8080 java-servlet-contact
+```
+
+You can access the application using `localhost:80` in your web browser.
+
+## Docker Compose
+
+**Docker must be installed.**
+
+You can run the following commands to run both App and MySQL.
+
+```
+docker compose up
 ```
 
 You can access the application using `localhost:80` in your web browser.

@@ -31,6 +31,8 @@ This "Java Servlet Contact" project provides a solid foundation for developing a
 
 ## How to run
 
+### Maven
+
 Maven must be installed to compile this application.
 
 You can use the following commands to generate a WAR file.
@@ -40,6 +42,22 @@ mvn package
 ```
 
 Onc compiled, You can install the WAR in your favorite Servlet Container.
+
+## Docker
+
+**Docker must be installed.**
+
+Build the Docker image with the tag "java-servlet-contact"
+
+```
+docker build -t java-servlet-contact .
+```
+
+```
+docker run -p 80:8080 java-servlet-contact
+```
+
+You can access the application using `localhost:80` in your web browser.
 
 # License
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details
